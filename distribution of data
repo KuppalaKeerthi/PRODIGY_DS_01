@@ -1,0 +1,148 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset from your local drive
+df = pd.read_csv("D:\\all xerox\\titanic.csv")
+
+# Print the data in the dataset (first few rows)
+print(df.head())
+
+# Check for missing data
+print(df.isnull().sum())
+
+# Data Cleaning
+# Fill missing Age entries with the median
+df['Age'].fillna(df.Age.median(), inplace=True)
+
+# Create a new title feature from the passenger name
+df['Title'] = df['Name'].str.split(", ", expand=True)[1].str.split(".", expand=True)[0]
+
+# Group the data by title and calculate survival rates
+print(df.groupby('Title')['Survived'].mean())
+selected_columns = ['PassengerId', 'Name', 'Pclass', 'Sex', 'Age']
+print(df[selected_columns].head())  # Display only selected columns
+adults = df[df['Age'] >= 18]  # Select rows where Age is 18 or more
+print(adults.head())
+print(df.describe())  # Provides various summary statistics for numerical columns
+# A. Bar Charts
+
+# 1. Survival by Pclass
+print("\n**Bar Chart - Survival by Pclass:**")
+sns.barplot(x='Pclass', y='Survived', data=df)
+plt.title("Survival Rate by Passenger Class")
+plt.xlabel("Passenger Class (Pclass)")
+plt.ylabel("Survival Rate")
+plt.show()
+
+# ... (Add separate code blocks for remaining Bar Charts here)
+
+# B. Histograms
+
+# 1. Age Distribution
+print("\n**Histogram - Age Distribution:**")
+sns.displot(df['Age'])
+plt.title("Distribution of Passenger Ages")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+sns.barplot(x='Sex', y='Survived', data=df)
+plt.title("Survival Rate by Sex")
+plt.xlabel("Sex")
+plt.ylabel("Survival Rate")
+plt.show()
+sns.barplot(x='Embarked', y='Survived', data=df)
+plt.title("Survival Rate by Embarkation Port")
+plt.xlabel("Embarkation Port")
+plt.ylabel("Survival Rate")
+plt.show()
+sns.barplot(x='Title', y='Survived', data=df)
+plt.title("Survival Rate by Passenger Title")
+plt.xlabel("Passenger Title")
+plt.ylabel("Survival Rate")
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+sns.countplot(x='Pclass', data=df)
+plt.title("Distribution of Passengers by Class")
+plt.xlabel("Passenger Class (Pclass)")
+plt.ylabel("Number of Passengers")
+plt.show()
+sns.displot(df['Age'])
+plt.title("Distribution of Passenger Ages")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+sns.displot(df['Fare'])
+plt.title("Distribution of Passenger Fares")
+plt.xlabel("Fare")
+plt.ylabel("Frequency")
+plt.show()
+sns.displot(df['SibSp'])
+plt.title("Distribution of Number of Siblings/Spouses Aboard")
+plt.xlabel("Number of Siblings/Spouses (SibSp)")
+plt.ylabel("Frequency")
+plt.show()
+sns.displot(df['Parch'])
+plt.title("Distribution of Number of Parents/Children Aboard")
+plt.xlabel("Number of Parents/Children (Parch)")
+plt.ylabel("Frequency")
+plt.show()
+bins = [0, 10, 20, 30, 40, 50, 60, 80]
+age_groups = pd.cut(df['Age'], bins=bins, labels=range(len(bins)-1))
+sns.barplot(x=age_groups, y='Survived', data=df)
+plt.title("Survival Rate by Age Groups")
+plt.xlabel("Age Group")
+plt.ylabel("Survival Rate")
+plt.show()
+df['NamePrefix'] = df['Name'].str.split(' ', expand=True)[1].str[0]
+sns.barplot(x='NamePrefix', y='Survived', data=df)
+plt.title("Survival Rate by Name Prefix")
+plt.xlabel("Name Prefix")
+plt.ylabel("Survival Rate")
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+plt.show()
+if 'Cabin' in df.columns:
+  df['CabinClass'] = df['Cabin'].str[0]
+  sns.barplot(x='CabinClass', y='Survived', data=df)
+  plt.title("Survival Rate by Cabin Class")
+  plt.xlabel("Cabin Class")
+  plt.ylabel("Survival Rate")
+  plt.show()
+if 'Ticket' in df.columns:
+  df['TicketClass'] = df['Ticket'].str[0]
+  sns.barplot(x='TicketClass', y='Survived', data=df)
+  plt.title("Survival Rate by Ticket Class")
+  plt.xlabel("Ticket Class")
+  plt.ylabel("Survival Rate")
+  plt.show()
+sns.barplot(x='SibSp', y='Survived', data=df)
+plt.title("Survival Rate by Number of Siblings/Spouses")
+plt.xlabel("Number of Siblings/Spouses (SibSp)")
+plt.ylabel("Survival Rate")
+plt.show()
+sns.displot(df[df['Pclass']==1]['Fare'], label='Pclass 1')
+sns.displot(df[df['Pclass']==2]['Fare'], label='Pclass 2')
+sns.displot(df[df['Pclass']==3]['Fare'], label='Pclass 3')
+plt.title("Distribution of Fare by Passenger Class")
+plt.xlabel("Fare")
+plt.ylabel("Frequency")
+plt.legend()
+plt.show()
+sns.displot(df[df['Sex']=='male']['Age'], label='Male')
+sns.displot(df[df['Sex']=='female']['Age'], label='Female')
+plt.title("Distribution of Age by Sex")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.legend()
+plt.show()
+sns.displot(df[df['Pclass']==1]['SibSp'], label='Pclass 1')
+sns.displot(df[df['Pclass']==2]['SibSp'], label='Pclass 2')
+sns.displot(df[df['Pclass']==3]['SibSp'], label='Pclass 3')
+plt.title("Distribution of SibSp by Passenger Class")
+plt.xlabel("Number of Siblings/Spouses (SibSp)")
+plt.ylabel("Frequency")
+plt.legend()
+plt.show()
+
+
