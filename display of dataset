@@ -1,0 +1,28 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset from your local drive
+df = pd.read_csv("D:\\all xerox\\titanic.csv")
+
+# Print the data in the dataset (first few rows)
+print(df.head())
+
+# Check for missing data
+print(df.isnull().sum())
+
+# Data Cleaning
+# Fill missing Age entries with the median
+df['Age'].fillna(df.Age.median(), inplace=True)
+
+# Create a new title feature from the passenger name
+df['Title'] = df['Name'].str.split(", ", expand=True)[1].str.split(".", expand=True)[0]
+
+# Group the data by title and calculate survival rates
+print(df.groupby('Title')['Survived'].mean())
+selected_columns = ['PassengerId', 'Name', 'Pclass', 'Sex', 'Age']
+print(df[selected_columns].head())  # Display only selected columns
+adults = df[df['Age'] >= 18]  # Select rows where Age is 18 or more
+print(adults.head())
+print(df.describe())  # Provides various summary statistics for numerical columns
